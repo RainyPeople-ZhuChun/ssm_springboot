@@ -4,10 +4,9 @@ import com.rainypeople.tmall.pojo.Property;
 import com.rainypeople.tmall.service.PropertyService;
 import com.rainypeople.tmall.util.Page4Navigator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 public class PropertyController {
@@ -25,5 +24,27 @@ public class PropertyController {
         return page;
     }
 
+    @PostMapping("properties")
+    public Property add(@RequestBody Property bean){
+        propertyService.add(bean);
+        return bean;
+    }
 
+    @DeleteMapping("properties/{id}")
+    public String delete(@PathVariable("id")int id)throws IOException {
+        propertyService.delete(id);
+        return null;
+    }
+
+    @GetMapping("properties/{id}")
+    public Property get(@PathVariable("id")int id)throws IOException{
+        Property bean = propertyService.get(id);
+        return bean;
+    }
+
+    @PutMapping("properties")
+    public Property updata(@RequestBody Property bean)throws IOException{
+        propertyService.updata(bean);
+        return bean;
+    }
 }
