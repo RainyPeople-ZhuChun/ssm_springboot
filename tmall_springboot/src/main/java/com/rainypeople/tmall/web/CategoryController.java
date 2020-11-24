@@ -5,7 +5,6 @@ import com.rainypeople.tmall.service.CategoryService;
 import com.rainypeople.tmall.util.ImageUtil;
 import com.rainypeople.tmall.util.Page4Navigator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
