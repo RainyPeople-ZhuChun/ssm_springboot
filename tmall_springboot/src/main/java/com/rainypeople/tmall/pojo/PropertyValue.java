@@ -1,14 +1,13 @@
 package com.rainypeople.tmall.pojo;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "productimage")
+@Table(name = "propertyvalue")
 @JsonIgnoreProperties({"handler","hibernateLazyInitializer"})
-public class ProductImage {
+public class PropertyValue {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,10 +16,13 @@ public class ProductImage {
 
     @ManyToOne
     @JoinColumn(name = "pid")
-    @JsonBackReference
     private Product product;
 
-    private String type;
+    @ManyToOne
+    @JoinColumn(name = "ptid")
+    private Property property;
+
+    private String value;
 
     public int getId() {
         return id;
@@ -38,11 +40,19 @@ public class ProductImage {
         this.product = product;
     }
 
-    public String getType() {
-        return type;
+    public Property getProperty() {
+        return property;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setProperty(Property property) {
+        this.property = property;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

@@ -28,6 +28,17 @@ public class Product {
     private int stock;
     private Date createDate;
 
+    public ProductImage getFirstProductImage() {
+        return firstProductImage;
+    }
+
+    public void setFirstProductImage(ProductImage firstproductImage) {
+        this.firstProductImage = firstproductImage;
+    }
+
+    @Transient
+    private ProductImage firstProductImage;
+
     public int getId() {
         return id;
     }

@@ -1,6 +1,7 @@
 package com.rainypeople.tmall.web;
 
 import com.rainypeople.tmall.pojo.Product;
+import com.rainypeople.tmall.service.ProductImageService;
 import com.rainypeople.tmall.service.ProductService;
 import com.rainypeople.tmall.util.Page4Navigator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ public class ProductController {
 
     @Autowired
     ProductService productService;
+    @Autowired
+    ProductImageService productImageService;
 
     @GetMapping("categories/{cid}/products")
     public Page4Navigator<Product> list(@PathVariable("cid")int cid,
@@ -21,6 +24,7 @@ public class ProductController {
                                         @RequestParam(value = "size",defaultValue = "5")int size)throws IOException{
         start=start>0?start:0;
         Page4Navigator<Product> page = productService.list(cid, start, size, 5);
+        productImageService.setFirstProductImage(page.getContent());
         return page;
     }
 
