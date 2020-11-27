@@ -3,6 +3,8 @@ package com.rainypeople.tmall.service;
 import com.rainypeople.tmall.dao.OrderItemDao;
 import com.rainypeople.tmall.pojo.Order;
 import com.rainypeople.tmall.pojo.OrderItem;
+import com.rainypeople.tmall.pojo.Product;
+import com.rainypeople.tmall.pojo.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +40,36 @@ public class OrderItemService {
 
     public List<OrderItem> listByOrder(Order order) {
         return orderItemDao.findByOrderOrderByIdDesc(order);
+    }
+
+    public int getSaleCount(Product product) {
+        List<OrderItem> ois =listByProduct(product);
+        int result =0;
+        for (OrderItem oi : ois) {
+            if(null!=oi.getOrder())
+                if(null!= oi.getOrder() && null!=oi.getOrder().getPayDate())
+                    result+=oi.getNumber();
+        }
+        return result;
+    }
+
+    private List<OrderItem> listByProduct(Product product) {
+        return orderItemDao.findByProduct(product);
+    }
+
+    public List<OrderItem> listByUser(User user) {
+        return orderItemDao.findByUserAndOrderIsNull(user);
+    }
+
+    public void updata(OrderItem oi) {
+        orderItemDao.save(oi);
+    }
+
+    public void add(OrderItem oi) {
+        orderItemDao.save(oi);
+    }
+
+    public OrderItem get(int id) {
+        return orderItemDao.getOne(id);
     }
 }

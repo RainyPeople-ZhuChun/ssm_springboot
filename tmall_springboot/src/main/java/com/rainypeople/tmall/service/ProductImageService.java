@@ -1,6 +1,7 @@
 package com.rainypeople.tmall.service;
 
 import com.rainypeople.tmall.dao.ProductImageDao;
+import com.rainypeople.tmall.pojo.OrderItem;
 import com.rainypeople.tmall.pojo.Product;
 import com.rainypeople.tmall.pojo.ProductImage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,4 +53,12 @@ public class ProductImageService {
             product.setFirstProductImage(new ProductImage());
         }
     }
+
+    public void setFirstProdutImagesOnOrderItems(List<OrderItem> ois) {
+        for (OrderItem orderItem : ois) {
+            setFirstProductImage(orderItem.getProduct());
+        }
+    }
+
+
 }
