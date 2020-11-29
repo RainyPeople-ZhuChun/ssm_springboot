@@ -6,6 +6,9 @@ import com.rainypeople.tmall.pojo.OrderItem;
 import com.rainypeople.tmall.pojo.User;
 import com.rainypeople.tmall.util.Page4Navigator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
+@CacheConfig(cacheNames = "orders")
 public class OrderService {
 
     public static final String waitPay="waitPay";
@@ -32,10 +36,12 @@ public class OrderService {
     @Autowired
     OrderItemService orderItemService;
 
+    @CacheEvict(allEntries = true)
     public void updata(Order order) {
         orderDao.save(order);
     }
 
+    @Cacheable(key = "'orders-page-'+#p0+'-'+#p1")
     public Page4Navigator<Order> list(int start, int size, int navigatePages) {
         Sort sort=new Sort(Sort.Direction.DESC,"id");
         Pageable pageable=new PageRequest(start,size,sort);
@@ -57,17 +63,20 @@ public class OrderService {
         }
     }
 
+    @Cacheable(key= "'orders-one-'+#p0")
     public Order get(int oid) {
         return orderDao.getOne(oid);
     }
 
+    @CacheEvict(allEntries = true)
     @Transactional(propagation= Propagation.REQUIRED,rollbackForClassName="Exception")
     public float add(Order order, List<OrderItem> ois) {
         float total = 0;
         add(order);
 
-        if(false)
+        if(false) {
             throw new RuntimeException();
+        }
 
         for (OrderItem oi: ois) {
             oi.setOrder(order);
@@ -76,10 +85,13 @@ public class OrderService {
         }
         return total;
     }
+
+    @CacheEvict(allEntries = true)
     public void add(Order order) {
         orderDao.save(order);
     }
 
+    @Cacheable(key="'orders-page-'+#p0+ '-' + #p1")
     public List<Order> listByUserWithoutDelete(User user) {
         List<Order> orders = listByUserAndNotDeleted(user);
         orderItemService.fill(orders);

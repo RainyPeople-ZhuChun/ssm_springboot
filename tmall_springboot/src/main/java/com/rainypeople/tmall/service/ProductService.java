@@ -4,6 +4,7 @@ import com.rainypeople.tmall.dao.ProductDao;
 import com.rainypeople.tmall.pojo.Category;
 import com.rainypeople.tmall.pojo.Product;
 import com.rainypeople.tmall.util.Page4Navigator;
+import com.rainypeople.tmall.util.SpringContextUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.cache.annotation.CacheEvict;
@@ -70,7 +71,8 @@ public class ProductService {
         }
     }
     public void fill(Category category) {
-        List<Product> products = listByCategory(category);
+        ProductService productService = SpringContextUtil.getBean(ProductService.class);
+        List<Product> products = productService.listByCategory(category);
         productImageService.setFirstProductImage(products);
         category.setProducts(products);
     }
